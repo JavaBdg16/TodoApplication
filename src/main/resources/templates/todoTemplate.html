@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo list</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+    <div th:each="todo : ${modelTodoList}">
+        <span th:text="${todo.name}"></span>
+        <span th:text="${todo.description}"></span>
+        <span th:text="${todo.createDate}"></span>
+    </div>
+
+<table>
+    <thead>
+    <td>
+        Nazwa
+    </td>
+    <td>
+        Opis
+    </td>
+    <td>
+        Data utworzenia
+    </td>
+    </thead>
+    <tbody>
+    <tr th:each="todo : ${modelTodoList}">
+        <td th:text="${todo.name}" />
+        <td th:text="${todo.description}" />
+        <td th:text="${todo.createDate}" />
+    </tr>
+    </tbody>
+</table>
+
+<form method="post" th:object="${emptyTodo}" th:action="@{/todo}">
+
+    <div th:if="${#fields.hasErrors()}">
+        <span style="color:red">Usuń problemy i spóbuj ponownie</span>
+    </div>
+
+    <input type="text" name="name">
+    <span style="color:red" th:if="${#fields.hasErrors('name')}">
+        Błąd nazwy
+    </span>
+    <input type="text" name="description">
+    <input type="submit" value="Zapisz">
+</form>
+
+</body>
+</html>
