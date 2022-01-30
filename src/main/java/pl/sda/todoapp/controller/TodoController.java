@@ -38,7 +38,7 @@ public class TodoController {
     @GetMapping
     public String showTodos(Model model) {
         model.addAttribute("modelTodoList", todos);
-        model.addAttribute("emptyTodo", new Todo());
+        model.addAttribute("todo", new Todo());
 
         return "todoTemplate";
     }
@@ -48,10 +48,11 @@ public class TodoController {
     // POST /todo
     // stwórz nowe zadanie
     @PostMapping
-    public String createTodo(@Valid Todo todo, Errors errors) {
-//        if (errors.hasErrors()) {
-//            return "todoTemplate";
-//        }
+    public String createTodo(@Valid Todo todo, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("modelTodoList", todos);
+            return "todoTemplate";
+        }
 
         todo.setCreateDate(new Date());
         todos.add(todo);
