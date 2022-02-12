@@ -51,6 +51,7 @@ public class TodoController {
     public String createTodo(@Valid Todo todo, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("modelTodoList", todos);
+            model.addAttribute("todo", todo);
             return "todoTemplate";
         }
 
