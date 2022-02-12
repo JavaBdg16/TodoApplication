@@ -7,6 +7,8 @@ import java.util.Date;
 
 public class Todo {
 
+    private long id;
+
     @NotNull
     @NotEmpty
     @Size(min = 5, max = 100)
@@ -19,10 +21,19 @@ public class Todo {
 
     }
 
-    public Todo(String name, String description, Date createDate) {
+    public Todo(long id, String name, String description, Date createDate) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.createDate = createDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

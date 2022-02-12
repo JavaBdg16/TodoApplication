@@ -1,5 +1,6 @@
 package pl.sda.todoapp.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -7,29 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.sda.todoapp.model.Todo;
+import pl.sda.todoapp.repository.TodoRepository;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/todo")
 public class TodoController {
 
-    private List<Todo> todos = new ArrayList<>();
+    private TodoRepository todoRepository;
 
-    public TodoController() {
-        todos.add(new Todo("Zadanie 1", "Opis 1", new Date()));
-        todos.add(new Todo("Zadanie 2", "Opis 2", new Date()));
-        todos.add(new Todo("Zadanie 3", "Opis 3", new Date()));
-        todos.add(new Todo("Zadanie 4", "Opis 4", new Date()));
-        todos.add(new Todo("Zadanie 5", "Opis 5", new Date()));
-        todos.add(new Todo("Zadanie 6", "Opis 6", new Date()));
-        todos.add(new Todo("Zadanie 7", "Opis 7", new Date()));
-        todos.add(new Todo("Zadanie 8", "Opis 8", new Date()));
-        todos.add(new Todo("Zadanie 9", "Opis 9", new Date()));
+    @Autowired
+    public TodoController(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
     }
 
     // wyświetl wszystkie zadania
@@ -37,7 +29,7 @@ public class TodoController {
     // dlaczego "/" psuł????
     @GetMapping
     public String showTodos(Model model) {
-        model.addAttribute("modelTodoList", todos);
+        model.addAttribute("modelTodoList", todoRepository.findAll());
         model.addAttribute("todo", new Todo());
 
         return "todoTemplate";
@@ -50,13 +42,13 @@ public class TodoController {
     @PostMapping
     public String createTodo(@Valid Todo todo, Errors errors, Model model) {
         if (errors.hasErrors()) {
-            model.addAttribute("modelTodoList", todos);
+            model.addAttribute("modelTodoList", todoRepository.findAll());
             model.addAttribute("todo", todo);
             return "todoTemplate";
         }
 
         todo.setCreateDate(new Date());
-        todos.add(todo);
+        todoRepository.save(todo);
         return "redirect:/todo";
     }
 }
